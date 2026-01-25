@@ -1,0 +1,18 @@
+# 协作与分支开发规范
+
+1. **分支策略**：
+   - 严禁直接在 `main` 分支进行功能开发。
+   - 任何新功能、重构或 Bug 修复，请务必先引导我创建或切换到以 `feat/` 或 `fix/` 开头的特性分支。
+   - 示例：`feat/traditional-colors`, `fix/exchange-rate-overflow`。
+
+2. **提交与推送**：
+   - 在特性分支开发过程中，请主动提醒或协助我进行 `git push` 以备份进度。
+   - Commit Message 请遵循 Conventional Commits 规范（如 `feat:`, `fix:`, `refactor:`, `docs:`）。
+
+3. **合并流程**：
+   - 功能完成后，严禁在本地执行 `git merge main`。
+   - 请引导或提醒我使用 GitHub CLI (`gh pr create`) 或通过 GitHub 界面提起 Pull Request。
+   - 提醒我进行代码审查（Code Review）后再合入主干。
+
+4. **部署意识**：
+   - 意识到主干 `main` 的任何变动都会触发 Zeabur 的自动部署，因此必须保证合入的代码是生产就绪的。

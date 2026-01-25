@@ -196,9 +196,6 @@ class ToolboxApp {
       // 初始化工具
       await toolInstance.init();
 
-      // 加载工具样式
-      await this.loadToolStyles(toolId);
-
       // 更新当前工具
       this.currentTool = toolId;
       this.currentToolInstance = toolInstance;
@@ -239,37 +236,6 @@ class ToolboxApp {
     domHelper.empty(this.container);
   }
 
-  /**
-   * 加载工具样式
-   */
-  async loadToolStyles(toolId) {
-    const existingLink = domHelper.find(`#tool-styles-${toolId}`);
-    if (existingLink) {
-      return; // 样式已加载
-    }
-
-    // 工具ID到目录的映射
-    const toolPathMap = {
-      'analog-clock': 'clock',
-      'time-converter': 'time-converter',
-      'color-converter': 'color-converter',
-      'currency-converter': 'currency-converter',
-      'markdown': 'markdown',
-      'regex-tester': 'regex-tester',
-      'json-formatter': 'json-formatter'
-    };
-
-    const toolPath = toolPathMap[toolId] || toolId;
-    const href = `./tools/${toolPath}/style.css`;
-
-    const link = domHelper.create('link', [], {
-      rel: 'stylesheet',
-      href: href,
-      id: `tool-styles-${toolId}`
-    });
-
-    document.head.appendChild(link);
-  }
 
   /**
    * 显示加载状态

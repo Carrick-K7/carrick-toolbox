@@ -6,6 +6,7 @@
 import { domHelper } from '../../utils/domHelper.js';
 import { formatting } from '../../utils/formatting.js';
 import { LunarCalendar } from '../../utils/lunarCalendar.js';
+import './style.css';
 
 export default class AnalogClock {
   constructor(container) {

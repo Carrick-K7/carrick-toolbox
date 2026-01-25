@@ -3,6 +3,7 @@
  */
 
 import { domHelper } from '../../utils/domHelper.js';
+import './style.css';
 
 export default class TimeConverter {
   constructor(container) {
