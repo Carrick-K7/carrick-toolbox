@@ -1,0 +1,446 @@
+/* 货币转换器样式 */
+.currency-converter {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+}
+
+.currency-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.currency-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.currency-config-btn {
+  width: 40px;
+  height: 40px;
+  background: var(--bg-config);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.currency-config-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.currency-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.currency-input-section {
+  flex: 1;
+  padding: 16px;
+  background: var(--bg-config);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.currency-quick-amounts {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.quick-amount-btn {
+  padding: 6px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.quick-amount-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.currency-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.currency-input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.currency-amount,
+.currency-result {
+  padding: 12px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 20px;
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.3px;
+}
+
+.currency-amount:focus,
+.currency-result:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.currency-select {
+  padding: 10px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.currency-swap-btn {
+  width: 44px;
+  height: 44px;
+  background: var(--accent);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.currency-swap-btn:hover {
+  transform: rotate(180deg);
+}
+
+.currency-rate-info {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  padding: 12px;
+  background: var(--bg-config);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.rate-item {
+  padding: 4px 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+.currency-list {
+  padding: 16px;
+  background: var(--bg-config);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.currency-list-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.currency-list-amount {
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.currency-list-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.currency-list-item:last-child {
+  border-bottom: none;
+}
+
+.currency-list-name {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.currency-list-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.currency-data-source {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 10px;
+  background: var(--bg-config);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* 配置面板 */
+.currency-config {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+}
+
+.currency-converter .config-panel {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 24px var(--shadow);
+  overflow: hidden;
+  width: 280px;
+  transition: all 0.3s ease;
+}
+
+.currency-converter .config-panel.collapsed {
+  width: 100px;
+}
+
+.currency-converter .config-panel.collapsed .config-body {
+  display: none;
+}
+
+.currency-converter .config-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg-config);
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.2s;
+}
+
+.currency-converter .config-header:hover {
+  background: var(--accent);
+  color: white;
+}
+
+.currency-converter .config-header:hover .config-title,
+.currency-converter .config-header:hover .config-toggle {
+  color: white;
+}
+
+.currency-converter .config-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.currency-converter .config-toggle {
+  color: var(--text-secondary);
+  transition: transform 0.3s ease;
+  margin-right: 8px;
+}
+
+.currency-converter .config-panel.collapsed .config-toggle {
+  transform: rotate(0deg);
+}
+
+.currency-converter .config-panel:not(.collapsed) .config-toggle {
+  transform: rotate(180deg);
+}
+
+.currency-converter .config-body {
+  padding: 16px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.currency-converter .config-section {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.currency-converter .config-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.currency-converter .config-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.currency-converter .config-item {
+  margin-bottom: 8px;
+}
+
+.currency-converter .toggle-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.currency-converter .toggle-wrapper:hover {
+  background: var(--bg-card);
+}
+
+.currency-converter .config-label {
+  font-size: 14px;
+  color: var(--text-primary);
+  user-select: none;
+}
+
+.currency-converter .toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.currency-converter .toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+
+.currency-converter .toggle-switch.active {
+  background: var(--accent);
+}
+
+.currency-converter .toggle-switch.active::after {
+  left: 22px;
+}
+
+.custom-rates {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.custom-rate-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.custom-rate-item label {
+  font-size: 13px;
+  color: var(--text-primary);
+  min-width: 100px;
+}
+
+.custom-rate-input {
+  flex: 1;
+  padding: 6px 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.custom-rate-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.reset-rates-btn {
+  width: 100%;
+  padding: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.reset-rates-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+@media (max-width: 600px) {
+  .currency-main {
+    flex-direction: column;
+  }
+  
+  .currency-swap-btn {
+    transform: rotate(90deg);
+  }
+  
+  .currency-swap-btn:hover {
+    transform: rotate(270deg);
+  }
+}

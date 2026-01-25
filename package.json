@@ -1,0 +1,25 @@
+{
+  "name": "carrick-toolbox",
+  "version": "1.0.0",
+  "description": "现代化的多合一网页实用工具集合",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "toolbox",
+    "utilities",
+    "web",
+    "javascript",
+    "css"
+  ],
+  "author": "Carrick",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "color-name-list": "^14.29.0"
+  }
+}

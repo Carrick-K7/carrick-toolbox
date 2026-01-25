@@ -1,0 +1,551 @@
+/* ===================================
+   全局通用样式 - Carrick Toolbox
+   =================================== */
+
+/* CSS变量定义 */
+:root {
+  --bg-primary: #f0faf9;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-config: #f5fbfa;
+  --text-primary: #1a2e2c;
+  --text-secondary: #5a7a78;
+  --accent: #39C5BB;
+  --accent-light: #5dd9d0;
+  --accent-dark: #2aa69e;
+  --accent-glow: rgba(57, 197, 187, 0.3);
+  --border: rgba(57, 197, 187, 0.15);
+  --shadow: rgba(57, 197, 187, 0.1);
+  --clock-face: #fefefe;
+  --clock-marks: #2d3d3c;
+  --clock-hour: #1a2e2c;
+  --clock-minute: #39C5BB;
+  --clock-second: #ff6b8a;
+}
+
+.dark {
+  --bg-primary: #0a1414;
+  --bg-secondary: #0f1f1e;
+  --bg-card: #152524;
+  --bg-config: #0f1f1e;
+  --text-primary: #e0f5f3;
+  --text-secondary: #8abab6;
+  --accent: #39C5BB;
+  --accent-light: #5dd9d0;
+  --accent-dark: #2aa69e;
+  --accent-glow: rgba(57, 197, 187, 0.25);
+  --border: rgba(57, 197, 187, 0.2);
+  --shadow: rgba(0, 0, 0, 0.3);
+  --clock-face: #152524;
+  --clock-marks: #e0f5f3;
+  --clock-hour: #e0f5f3;
+  --clock-minute: #39C5BB;
+  --clock-second: #ff6b8a;
+}
+
+/* Reset和基础样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Outfit', 'Noto Sans SC', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* 应用容器 */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* 侧边栏样式 */
+.sidebar {
+  width: 260px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 100;
+  transition: width 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar.collapsed {
+  width: 72px;
+}
+
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .category-header span,
+.sidebar.collapsed .category-toggle,
+.sidebar.collapsed .tool-item > span,
+.sidebar.collapsed .collapse-text {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.sidebar.collapsed .category-submenu {
+  display: none;
+}
+
+.sidebar.collapsed .category-header {
+  padding: 12px;
+  justify-content: center;
+}
+
+.sidebar.collapsed .tool-item {
+  padding: 12px;
+  justify-content: center;
+}
+
+.sidebar.collapsed .sidebar-header {
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.sidebar.collapsed .logo {
+  gap: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.logo i {
+  font-size: 24px;
+  color: var(--accent);
+}
+
+.sidebar-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sidebar-toggle:hover {
+  background: var(--bg-config);
+  color: var(--text-primary);
+}
+
+.sidebar-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tool-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tool-item,
+.tool-category {
+  margin-bottom: 4px;
+}
+
+.tool-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.category-toggle {
+  margin-left: auto;
+  font-size: 12px;
+  transition: transform 0.3s;
+}
+
+.tool-category.expanded .category-toggle {
+  transform: rotate(180deg);
+}
+
+.category-submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.tool-category.expanded .category-submenu {
+  max-height: 300px;
+}
+
+.category-submenu .tool-item {
+  padding-left: 44px;
+  font-size: 14px;
+}
+
+.tool-item:hover {
+  background: var(--bg-config);
+}
+
+.tool-item.active {
+  background: var(--accent);
+  color: white;
+}
+
+.tool-item i {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+.tool-item.under-dev span {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.tool-item.under-dev i {
+  opacity: 0.5;
+}
+
+.tool-item.under-dev:hover span,
+.tool-item.under-dev:hover i {
+  opacity: 0.7;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.theme-toggle:hover {
+  background: var(--bg-config);
+}
+
+.sidebar.collapsed .theme-toggle {
+  padding: 12px;
+  justify-content: center;
+  width: 48px;
+  margin: 0 auto;
+}
+
+.sidebar.collapsed .theme-toggle span {
+  display: none;
+}
+
+.sidebar.collapsed .sidebar-toggle {
+  padding: 8px;
+  min-width: 48px;
+  justify-content: center;
+  margin: 0;
+}
+
+.sidebar.collapsed .sidebar-toggle span {
+  display: none;
+}
+
+/* 主内容区域 */
+.main-content {
+  flex: 1;
+  margin-left: 260px;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+}
+
+.main-content.expanded {
+  margin-left: 72px;
+}
+
+/* 工具容器 */
+#tool-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* 工具切换动画 */
+.tool-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.tool-panel.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+/* 移动端菜单按钮 */
+.mobile-menu-toggle {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 1001;
+  transition: all 0.2s;
+}
+
+.mobile-menu-toggle:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  
+  .main-content {
+    margin-left: 0;
+    padding: 80px 16px 16px;
+  }
+  
+  .main-content.expanded {
+    margin-left: 0;
+  }
+
+  .mobile-menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* 通用工具类 */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+.loading::after {
+  content: '';
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-top: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+}
+
+.error-message h3 {
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.error-message button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.error-message button:hover {
+  opacity: 0.9;
+}
+
+/* 开发中提示 */
+.under-development {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 40px;
+  text-align: center;
+}
+
+.dev-icon {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, var(--accent) 0%, #2dd4bf 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.dev-icon i {
+  font-size: 60px;
+  color: white;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+.under-development h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.dev-status {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.dev-hint {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+}
+
+.dev-progress {
+  width: 100%;
+  max-width: 300px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 60%;
+  background: linear-gradient(90deg, var(--accent) 0%, #2dd4bf 100%);
+  border-radius: 4px;
+  animation: progress 2s ease-in-out infinite;
+}
+
+@keyframes progress {
+  0% {
+    width: 40%;
+  }
+  50% {
+    width: 70%;
+  }
+  100% {
+    width: 40%;
+  }
+}

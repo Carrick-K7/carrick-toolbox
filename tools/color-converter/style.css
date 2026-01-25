@@ -1,0 +1,192 @@
+/* 颜色转换器样式 */
+.color-converter {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.color-preview-section {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin-bottom: 24px;
+  background: var(--bg-config);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.color-preview {
+  position: relative;
+  width: 200px;
+  min-height: 120px;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+}
+
+.color-picker-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.color-info {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.color-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.color-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  width: 36px;
+  height: 36px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.action-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.color-formats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.color-format-card {
+  padding: 14px;
+  background: var(--bg-config);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.color-format-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.color-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.color-input {
+  flex: 1;
+  padding: 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: 'Outfit', monospace;
+}
+
+.color-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.color-copy-btn {
+  padding: 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.color-copy-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.color-sliders {
+  padding: 16px;
+  background: var(--bg-config);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.color-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.color-slider-row:last-child {
+  margin-bottom: 0;
+}
+
+.color-slider-label {
+  width: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.color-slider {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--border);
+}
+
+.color-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.color-slider-value {
+  width: 40px;
+  text-align: right;
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-family: 'Outfit', monospace;
+}
+
+@media (max-width: 600px) {
+  .color-formats-grid {
+    grid-template-columns: 1fr;
+  }
+}

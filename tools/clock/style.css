@@ -1,0 +1,690 @@
+/* ===================================
+   模拟时钟工具样式
+   =================================== */
+
+.clock-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.clock {
+  width: var(--clock-size, 280px);
+  height: var(--clock-size, 280px);
+  background: var(--clock-face);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 
+    0 8px 32px var(--shadow),
+    inset 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 3px solid var(--accent);
+}
+
+.clock-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+}
+
+.clock-face {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
+}
+
+.hand {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: 50% 100%;
+  border-radius: 10px;
+  transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.hour-hand {
+  width: calc(var(--clock-size, 280px) * 0.025);
+  height: calc(var(--clock-size, 280px) * 0.25);
+  background: var(--clock-hour);
+  transform: translateX(-50%) translateY(-100%) rotate(0deg);
+}
+
+.minute-hand {
+  width: calc(var(--clock-size, 280px) * 0.018);
+  height: calc(var(--clock-size, 280px) * 0.35);
+  background: var(--clock-minute);
+  transform: translateX(-50%) translateY(-100%) rotate(0deg);
+}
+
+.second-hand {
+  width: calc(var(--clock-size, 280px) * 0.008);
+  height: calc(var(--clock-size, 280px) * 0.4);
+  background: var(--clock-second);
+  transform: translateX(-50%) translateY(-100%) rotate(0deg);
+}
+
+.second-hand.smooth {
+  transition: none;
+}
+
+.center-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--clock-size, 280px) * 0.05);
+  height: calc(var(--clock-size, 280px) * 0.05);
+  background: var(--clock-second);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.center-dot-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--clock-size, 280px) * 0.018);
+  height: calc(var(--clock-size, 280px) * 0.018);
+  background: white;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+}
+
+.hour-number {
+  font-family: 'Poppins', 'Outfit', sans-serif;
+  font-weight: 600;
+  user-select: none;
+}
+
+.digital-time {
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 8px;
+  font-family: 'Orbitron', 'Outfit', monospace;
+  letter-spacing: 2px;
+}
+
+.digital-time .seconds {
+  font-size: 24px;
+  opacity: 0.7;
+}
+
+.date-display {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.lunar-display {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.festival-display {
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.holiday-countdown {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--bg-config);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  width: 100%;
+  max-width: 400px;
+}
+
+.holiday-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.holiday-next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: var(--bg-card);
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.holiday-next-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.holiday-next-icon {
+  font-size: 28px;
+}
+
+.holiday-next-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.holiday-next-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.holiday-next-date {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.holiday-next-countdown {
+  text-align: right;
+}
+
+.holiday-days {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.holiday-days-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-left: 2px;
+}
+
+.holiday-today {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--clock-second);
+}
+
+.holiday-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.holiday-item {
+  display: grid;
+  grid-template-columns: 24px 1fr 70px 50px;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.holiday-item-icon {
+  font-size: 16px;
+}
+
+.holiday-item-name {
+  flex: 1;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.holiday-item-date {
+  color: var(--text-secondary);
+}
+
+.holiday-item-days {
+  color: var(--accent);
+  font-weight: 600;
+  min-width: 40px;
+  text-align: right;
+}
+
+.holiday-empty {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 13px;
+  padding: 20px;
+}
+
+.calendar-wrapper {
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--bg-config);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  min-width: 320px;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.calendar-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.calendar-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.calendar-nav-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-nav-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-weekday {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 8px 4px;
+}
+
+.calendar-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--text-primary);
+  padding: 4px 2px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 40px;
+}
+
+.calendar-solar {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.calendar-lunar {
+  font-size: 10px;
+  color: var(--text-secondary);
+  line-height: 1.2;
+}
+
+.calendar-day:hover {
+  background: var(--bg-card);
+}
+
+.calendar-day.today {
+  background: var(--accent);
+}
+
+.calendar-day.today .calendar-solar,
+.calendar-day.today .calendar-lunar {
+  color: white !important;
+}
+
+.calendar-day.other-month {
+  opacity: 0.4;
+}
+
+.calendar-day.weekend .calendar-solar {
+  color: var(--clock-second);
+}
+
+.calendar-day.holiday {
+  position: relative;
+}
+
+.calendar-day.holiday::after {
+  content: '休';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 8px;
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.calendar-day.workday {
+  position: relative;
+}
+
+.calendar-day.workday::after {
+  content: '班';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 8px;
+  color: var(--clock-second);
+  font-weight: 600;
+}
+
+/* 配置面板样式 - 右侧固定 */
+.clock-config {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+}
+
+.config-panel {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 24px var(--shadow);
+  overflow: hidden;
+  width: 280px;
+  transition: all 0.3s ease;
+}
+
+.config-panel.collapsed {
+  width: 100px;
+}
+
+.config-panel.collapsed .config-body {
+  display: none;
+}
+
+.config-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg-config);
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.2s;
+}
+
+.config-header:hover {
+  background: var(--accent);
+  color: white;
+}
+
+.config-header:hover .config-title,
+.config-header:hover .config-toggle {
+  color: white;
+}
+
+.config-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.config-toggle {
+  color: var(--text-secondary);
+  transition: transform 0.3s ease;
+  margin-right: 8px;
+}
+
+.config-panel.collapsed .config-toggle {
+  transform: rotate(0deg);
+}
+
+.config-panel:not(.collapsed) .config-toggle {
+  transform: rotate(180deg);
+}
+
+.config-body {
+  padding: 16px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.config-section {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.config-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.config-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.timezone-wrapper {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.timezone-select {
+  flex: 1;
+  padding: 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.timezone-select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.timezone-reset-btn {
+  width: 36px;
+  height: 36px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.timezone-reset-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.timezone-display {
+  font-size: 11px;
+  color: var(--text-secondary);
+  padding: 4px 8px;
+  background: var(--bg-card);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.config-item {
+  margin-bottom: 12px;
+}
+
+.config-item:last-child {
+  margin-bottom: 0;
+}
+
+.config-label {
+  font-size: 13px;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.config-hint {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* Toggle Switch */
+.toggle-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toggle-switch {
+  width: 44px;
+  height: 24px;
+  background: var(--border);
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.toggle-switch.active {
+  background: var(--accent);
+}
+
+.toggle-switch.active::after {
+  left: 22px;
+}
+
+/* Range Slider */
+.range-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.config-range {
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.config-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.range-value {
+  font-size: 12px;
+  color: var(--text-secondary);
+  min-width: 50px;
+  text-align: right;
+}
+
+/* Button Group */
+.btn-group {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-option {
+  flex: 1;
+  padding: 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-option:hover {
+  border-color: var(--accent);
+}
+
+.btn-option.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .clock-wrapper {
+    padding: 16px;
+    gap: 16px;
+  }
+  
+  .clock {
+    --clock-size: 240px;
+  }
+  
+  .digital-time {
+    font-size: 28px;
+  }
+  
+  .digital-time .seconds {
+    font-size: 20px;
+  }
+  
+  .calendar-wrapper {
+    min-width: 280px;
+  }
+}
