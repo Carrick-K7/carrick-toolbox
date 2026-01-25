@@ -80,15 +80,6 @@
 
 ## Active Task (当前任务)
 
-### 当前任务：项目文档更新
-**状态**：🔄 进行中
-
-#### 任务内容：
-1. 🔄 清理多余文件
-2. 🔄 更新 task_spec.md
-3. ⏳ 更新 tech_spec.md
-4. ⏳ 更新 product_spec.md
-
 ## Backlog (待办)
 
 ### P1 - 高优先级
