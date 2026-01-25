@@ -3,7 +3,8 @@
  */
 
 import { domHelper } from '../../utils/domHelper.js';
-import { getColorName } from '../../utils/colorNames.js';
+import { chineseColors } from '../../utils/chineseColors.js';
+import './style.css';
 
 export default class ColorConverter {
   constructor(container) {
