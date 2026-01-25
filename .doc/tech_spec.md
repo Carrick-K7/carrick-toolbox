@@ -188,15 +188,17 @@ interface LocalStorageData {
    - 常量使用UPPER_SNAKE_CASE（`DEFAULT_THEME`）
 
 2. **文件组织**：
-   - 单文件架构：HTML、CSS、JS保持在index.html中
-   - 模块化设计：每个工具独立封装，通过事件通信
+   - ES6模块化：每个工具独立模块，通过import/export通信
+   - CSS导入：工具模块中 `import './style.css'` 让Vite处理
    - 注释规范：关键逻辑必须包含中文注释
+   - 目录结构：tools/工具名/{index.js, style.css}
 
 3. **性能优化**：
    - 使用事件委托减少事件监听器
-   - 懒加载非关键功能
+   - 懒加载工具模块（动态import）
    - 防抖处理用户输入
    - 使用CSS transform而非position动画
+   - Vite自动代码分割和Tree Shaking
 
 ### 交互规范
 1. **工具切换**：
