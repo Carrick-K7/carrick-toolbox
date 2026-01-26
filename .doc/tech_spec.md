@@ -124,6 +124,28 @@ interface TimeData {
   timestamp: number;
 }
 
+// 节假日数据接口
+interface HolidayData {
+  year: number;
+  month: number;
+  day: number;
+  status: 'holiday' | 'workday' | null;
+  description?: string;
+}
+
+// 农历数据接口
+interface LunarData {
+  year: number;
+  month: number;
+  day: number;
+  isLeap: boolean;
+  lunarYear: number;
+  lunarMonth: string;
+  lunarDay: string;
+  zodiac: string;
+  festival?: string;
+}
+
 // 正则表达式测试数据接口
 interface RegexTestData {
   pattern: string;
@@ -210,6 +232,13 @@ interface LocalStorageData {
    - 用户设置自动保存到localStorage
    - 敏感数据（如货币汇率）设置缓存过期时间
    - 提供数据导出和清理功能
+
+3. **节假日数据管理**：
+   - 数据来源：国务院办公厅官方通知
+   - 更新频率：每年更新一次（通常11-12月发布次年安排）
+   - 数据位置：`utils/lunarCalendar.js` 的 `getHolidayStatus` 方法
+   - 数据格式：`'YYYY-M-D': 'holiday' | 'workday'`
+   - 维护要求：每年根据官方通知及时更新，确保准确性
 
 3. **错误处理**：
    - 网络请求失败显示友好提示
