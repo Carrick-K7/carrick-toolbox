@@ -242,7 +242,7 @@ export default class JsonFormatter {
       // 去掉首尾的引号
       let str = value;
       if ((str.startsWith('"') && str.endsWith('"')) || 
-          (str.startsWith(\"'\") && str.endsWith(\"'\"))) {
+          (str.startsWith("'") && str.endsWith("'"))) {
         str = str.slice(1, -1);
       }
       const unescaped = JSON.parse(`"${str.replace(/"/g, '\\"')}"`);
