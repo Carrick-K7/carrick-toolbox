@@ -1,0 +1,357 @@
+.regex-tester {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+}
+
+/* 区块通用样式 */
+.regex-section {
+  background: var(--surface-color);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.regex-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.regex-section-title {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-color);
+}
+
+/* 正则输入区 */
+.regex-input-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.regex-pattern-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.regex-pattern-input:focus {
+  border-color: var(--primary-color);
+}
+
+.regex-flags {
+  display: flex;
+  gap: 1rem;
+}
+
+.regex-flag-label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.regex-flag-label input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--primary-color);
+}
+
+.regex-status {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.regex-status.valid {
+  background: #22c55e20;
+  color: #22c55e;
+}
+
+.regex-status.invalid {
+  background: #ef444420;
+  color: #ef4444;
+}
+
+/* 按钮 */
+.regex-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+}
+
+.regex-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.regex-btn.small {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  background: var(--surface-color);
+  color: var(--text-color);
+}
+
+.regex-btn.small:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* 预设按钮 */
+.regex-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.regex-preset-btn {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.regex-preset-btn:hover {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+/* 分栏布局 */
+.regex-split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  min-height: 300px;
+}
+
+.regex-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.regex-textarea {
+  flex: 1;
+  padding: 1rem;
+  border: none;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+}
+
+/* 匹配结果 */
+.regex-result {
+  flex: 1;
+  padding: 1rem;
+  background: var(--bg-color);
+  overflow-y: auto;
+}
+
+.regex-result-placeholder,
+.regex-result-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 2rem;
+}
+
+.regex-result-error {
+  text-align: center;
+  color: #ef4444;
+  padding: 2rem;
+}
+
+.regex-match-count {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: var(--bg-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.regex-highlighted-text {
+  padding: 1rem;
+  background: var(--bg-color);
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin-bottom: 1rem;
+}
+
+.regex-highlighted-text mark {
+  background: #22c55e40;
+  color: var(--text-color);
+  padding: 0.125rem 0.25rem;
+  border-radius: 3px;
+}
+
+.regex-match-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.regex-match-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--surface-color);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  flex-wrap: wrap;
+}
+
+.regex-match-number {
+  font-weight: 600;
+  color: var(--primary-color);
+  min-width: 2rem;
+}
+
+.regex-match-text {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  color: var(--text-color);
+}
+
+.regex-match-pos {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+
+.regex-match-groups {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  width: 100%;
+}
+
+/* 替换区域 */
+.regex-replace-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.regex-replace-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-size: 0.875rem;
+}
+
+.regex-replace-result {
+  margin-top: 0.75rem;
+  padding: 1rem;
+  background: var(--bg-color);
+  border-radius: 8px;
+}
+
+.regex-replace-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.regex-replace-output {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.875rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0;
+}
+
+.regex-replace-placeholder {
+  color: var(--text-muted);
+}
+
+.regex-replace-error {
+  color: #ef4444;
+}
+
+/* 快速参考 */
+.regex-quick-ref {
+  background: var(--surface-color);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.regex-ref-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.5rem;
+}
+
+.regex-ref-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-color);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.regex-ref-item code {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  color: var(--primary-color);
+  font-weight: 600;
+  min-width: 3rem;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .regex-split-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .regex-flags {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .regex-ref-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .regex-section-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}

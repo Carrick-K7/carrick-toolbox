@@ -87,22 +87,21 @@ class ToolboxApp {
         icon: 'edit',
         category: 'writing-tools',
         module: () => import('./tools/markdown/index.js')
+      },
+      {
+        id: 'json-formatter',
+        name: 'JSON格式化',
+        icon: 'brackets-curly',
+        category: 'developer-tools',
+        module: () => import('./tools/json-formatter/index.js')
+      },
+      {
+        id: 'regex-tester',
+        name: '正则测试',
+        icon: 'code',
+        category: 'developer-tools',
+        module: () => import('./tools/regex-tester/index.js')
       }
-      // 未实现的工具，暂时注释
-      // {
-      //   id: 'regex-tester',
-      //   name: '正则测试',
-      //   icon: 'code',
-      //   category: 'developer-tools',
-      //   module: () => import('./tools/regex-tester/index.js')
-      // },
-      // {
-      //   id: 'json-formatter',
-      //   name: 'JSON格式化',
-      //   icon: 'code',
-      //   category: 'developer-tools',
-      //   module: () => import('./tools/json-formatter/index.js')
-      // }
     ];
 
     for (const config of toolConfigs) {
