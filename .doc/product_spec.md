@@ -1,4 +1,10 @@
-# Toolbox PTT V2 - Product Spec
+# Toolbox v1.0.0 - Product Spec
+> **Project**: Carrick Toolbox (Web工具箱)  
+> **Version**: v1.0.0  
+> **Team**: 🔨 Forge (主力)  
+> **PTT Version**: V3  
+> **Status**: 开发中 🟡  
+> **Last Updated**: 2026-02-09
 
 ## 项目概述
 Carrick Toolbox 是一个现代化的多合一网页实用工具集合，提供简洁、高效、美观的日常工具体验。
