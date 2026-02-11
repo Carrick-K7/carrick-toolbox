@@ -12,6 +12,63 @@ class ToolboxApp {
     this.container = null;
     this.sidebar = null;
     this.isInitialized = false;
+    this.usageStats = this.loadUsageStats();
+  }
+
+  /**
+   * 加载使用统计
+   */
+  loadUsageStats() {
+    try {
+      const saved = localStorage.getItem('toolbox_usage_stats');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error('Failed to load usage stats:', e);
+    }
+    return {};
+  }
+
+  /**
+   * 保存使用统计
+   */
+  saveUsageStats() {
+    try {
+      localStorage.setItem('toolbox_usage_stats', JSON.stringify(this.usageStats));
+    } catch (e) {
+      console.error('Failed to save usage stats:', e);
+    }
+  }
+
+  /**
+   * 记录工具使用
+   */
+  recordToolUsage(toolId) {
+    if (!this.usageStats[toolId]) {
+      this.usageStats[toolId] = { count: 0, lastUsed: null };
+    }
+    this.usageStats[toolId].count++;
+    this.usageStats[toolId].lastUsed = new Date().toISOString();
+    this.saveUsageStats();
+    this.updateStatsPanel();
+  }
+
+  /**
+   * 获取使用统计
+   */
+  getUsageStats() {
+    const stats = [];
+    for (const [toolId, toolConfig] of this.tools) {
+      const usage = this.usageStats[toolId] || { count: 0, lastUsed: null };
+      stats.push({
+        id: toolId,
+        name: toolConfig.name,
+        count: usage.count,
+        lastUsed: usage.lastUsed
+      });
+    }
+    return stats.sort((a, b) => b.count - a.count);
   }
 
   /**
@@ -43,6 +100,9 @@ class ToolboxApp {
 
     // 绑定移动端菜单
     this.bindMobileMenu();
+
+    // 渲染使用统计面板
+    this.renderStatsPanel();
 
     this.isInitialized = true;
     console.log('Carrick Toolbox initialized');
@@ -101,6 +161,20 @@ class ToolboxApp {
         icon: 'code',
         category: 'developer-tools',
         module: () => import('./tools/regex-tester/index.js')
+      },
+      {
+        id: 'base64-converter',
+        name: 'Base64编解码',
+        icon: 'exchange-alt',
+        category: 'developer-tools',
+        module: () => import('./tools/base64-converter/index.js')
+      },
+      {
+        id: 'password-generator',
+        name: '密码生成器',
+        icon: 'key',
+        category: 'security-tools',
+        module: () => import('./tools/password-generator/index.js')
       }
     ];
 
@@ -176,6 +250,11 @@ class ToolboxApp {
       return;
     }
 
+    // 如果正在切换，先添加退出动画
+    if (this.currentTool && this.currentTool !== toolId) {
+      await this.animateToolTransition('out');
+    }
+
     try {
       // 显示加载状态
       this.showLoading();
@@ -195,9 +274,18 @@ class ToolboxApp {
       // 初始化工具
       await toolInstance.init();
 
+      // 添加入场动画
+      this.animateToolTransition('in');
+
       // 更新当前工具
       this.currentTool = toolId;
       this.currentToolInstance = toolInstance;
+
+      // 记录使用统计
+      this.recordToolUsage(toolId);
+
+      // 更新导航状态
+      this.updateActiveNavigation(toolId);
 
       // 隐藏加载状态
       this.hideLoading();
@@ -351,6 +439,147 @@ class ToolboxApp {
     if (this.currentTool) {
       await this.loadTool(this.currentTool);
     }
+  }
+
+  /**
+   * 工具切换动画
+   */
+  async animateToolTransition(direction) {
+    return new Promise((resolve) => {
+      const container = this.container;
+      if (!container) {
+        resolve();
+        return;
+      }
+
+      if (direction === 'out') {
+        container.style.opacity = '1';
+        container.style.transform = 'translateX(0)';
+        container.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+        
+        requestAnimationFrame(() => {
+          container.style.opacity = '0';
+          container.style.transform = 'translateX(-20px)';
+          setTimeout(resolve, 200);
+        });
+      } else {
+        container.style.opacity = '0';
+        container.style.transform = 'translateX(20px)';
+        container.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        
+        requestAnimationFrame(() => {
+          container.style.opacity = '1';
+          container.style.transform = 'translateX(0)';
+          setTimeout(resolve, 300);
+        });
+      }
+    });
+  }
+
+  /**
+   * 渲染使用统计面板
+   */
+  renderStatsPanel() {
+    const sidebar = this.sidebar;
+    if (!sidebar) return;
+
+    // 检查是否已存在
+    let statsPanel = sidebar.querySelector('.usage-stats-panel');
+    if (statsPanel) {
+      statsPanel.remove();
+    }
+
+    statsPanel = document.createElement('div');
+    statsPanel.className = 'usage-stats-panel';
+    statsPanel.innerHTML = `
+      <div class="stats-header" id="stats-toggle">
+        <i class="fas fa-chart-bar"></i>
+        <span>使用统计</span>
+        <i class="fas fa-chevron-down stats-toggle-icon"></i>
+      </div>
+      <div class="stats-content" id="stats-content">
+        <div class="stats-list" id="stats-list"></div>
+        <div class="stats-total" id="stats-total"></div>
+      </div>
+    `;
+
+    const footer = sidebar.querySelector('.sidebar-footer');
+    if (footer) {
+      sidebar.insertBefore(statsPanel, footer);
+    } else {
+      sidebar.appendChild(statsPanel);
+    }
+
+    // 绑定展开/收起
+    const toggle = statsPanel.querySelector('#stats-toggle');
+    const content = statsPanel.querySelector('#stats-content');
+    const icon = statsPanel.querySelector('.stats-toggle-icon');
+    
+    // 默认收起
+    let isExpanded = false;
+    
+    toggle.addEventListener('click', () => {
+      isExpanded = !isExpanded;
+      content.classList.toggle('expanded', isExpanded);
+      icon.style.transform = isExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
+
+    this.updateStatsPanel();
+  }
+
+  /**
+   * 更新使用统计面板
+   */
+  updateStatsPanel() {
+    const statsPanel = this.sidebar?.querySelector('.usage-stats-panel');
+    if (!statsPanel) return;
+
+    const statsList = statsPanel.querySelector('#stats-list');
+    const statsTotal = statsPanel.querySelector('#stats-total');
+    
+    const stats = this.getUsageStats();
+    const totalUsage = stats.reduce((sum, s) => sum + s.count, 0);
+
+    if (stats.length === 0 || totalUsage === 0) {
+      statsList.innerHTML = '<div class="stats-empty">暂无使用记录</div>';
+      statsTotal.innerHTML = '';
+      return;
+    }
+
+    // 只显示前5个使用最多的工具
+    const topStats = stats.slice(0, 5);
+    const maxCount = Math.max(...topStats.map(s => s.count));
+
+    statsList.innerHTML = topStats.map(stat => {
+      const percentage = maxCount > 0 ? (stat.count / maxCount) * 100 : 0;
+      const isActive = stat.id === this.currentTool;
+      return `
+        <div class="stats-item ${isActive ? 'active' : ''}" data-tool="${stat.id}">
+          <div class="stats-item-info">
+            <span class="stats-item-name">${stat.name}</span>
+            <span class="stats-item-count">${stat.count}次</span>
+          </div>
+          <div class="stats-bar">
+            <div class="stats-bar-fill" style="width: ${percentage}%"></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    statsTotal.innerHTML = `
+      <div class="stats-total-label">总使用次数</div>
+      <div class="stats-total-value">${totalUsage}</div>
+    `;
+
+    // 点击统计项切换到对应工具
+    statsList.querySelectorAll('.stats-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const toolId = item.dataset.tool;
+        if (toolId && toolId !== this.currentTool) {
+          this.loadTool(toolId);
+        }
+      });
+    });
   }
 }
 

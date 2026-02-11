@@ -77,7 +77,7 @@ export default class JsonFormatter {
             <textarea 
               class="json-editor" 
               id="json-input" 
-              placeholder="请输入 JSON 数据...&#10;例如: {\"name\": \"Carrick\", \"age\": 25}"
+              placeholder="请输入 JSON 数据...&#10;例如: {"name": "Carrick", "age": 25}"
             ></textarea>
           </div>
           

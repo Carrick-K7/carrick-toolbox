@@ -3,10 +3,13 @@
  * 用于解决ES6模块的CORS问题
  */
 
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
-const url = require('url');
+import http from 'http';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const PORT = 3000;
 
@@ -41,8 +44,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  const parsedUrl = url.parse(req.url);
-  let pathname = parsedUrl.pathname;
+  let pathname = req.url;
 
   // 默认加载index.html
   if (pathname === '/') {

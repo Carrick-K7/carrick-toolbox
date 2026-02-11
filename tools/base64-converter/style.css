@@ -1,0 +1,203 @@
+.base64-converter {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.base64-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.base64-toolbar-left,
+.base64-toolbar-right {
+  display: flex;
+  gap: 8px;
+}
+
+.base64-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--miku-bg-tertiary);
+  border: 1px solid var(--miku-border);
+  border-radius: 6px;
+  color: var(--miku-text);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.base64-btn:hover {
+  background: var(--miku-primary);
+  border-color: var(--miku-primary);
+  color: #fff;
+}
+
+.base64-btn.primary {
+  background: var(--miku-primary);
+  border-color: var(--miku-primary);
+  color: #fff;
+}
+
+.base64-btn.danger:hover {
+  background: #ff6b6b;
+  border-color: #ff6b6b;
+}
+
+.base64-config-panel {
+  display: flex;
+  gap: 20px;
+  padding: 12px 16px;
+  background: var(--miku-bg-secondary);
+  border: 1px solid var(--miku-border);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.base64-config-item {
+  display: flex;
+  align-items: center;
+}
+
+.base64-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--miku-text);
+}
+
+.base64-checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--miku-primary);
+}
+
+.base64-editor-container {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  height: 400px;
+}
+
+.base64-editor-section {
+  display: flex;
+  flex-direction: column;
+  background: var(--miku-bg-secondary);
+  border: 1px solid var(--miku-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.base64-editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: rgba(57, 197, 187, 0.1);
+  border-bottom: 1px solid var(--miku-border);
+}
+
+.base64-editor-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--miku-text);
+}
+
+.base64-status {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.base64-status.valid {
+  color: #4caf50;
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.base64-status.invalid {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.base64-status.success {
+  color: #4caf50;
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.base64-status.error {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.base64-editor {
+  flex: 1;
+  padding: 14px;
+  background: var(--miku-bg);
+  border: none;
+  color: var(--miku-text);
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+}
+
+.base64-editor::placeholder {
+  color: var(--miku-text-muted);
+}
+
+.base64-editor-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--miku-text-secondary);
+  font-size: 20px;
+}
+
+.base64-info-bar {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--miku-bg-secondary);
+  border: 1px solid var(--miku-border);
+  border-radius: 8px;
+}
+
+.base64-info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--miku-text-secondary);
+}
+
+.base64-info-item i {
+  color: var(--miku-primary);
+}
+
+@media (max-width: 768px) {
+  .base64-editor-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto 1fr;
+    height: auto;
+  }
+
+  .base64-editor-divider {
+    transform: rotate(90deg);
+    padding: 8px 0;
+  }
+
+  .base64-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .base64-config-panel {
+    flex-wrap: wrap;
+  }
+}

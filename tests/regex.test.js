@@ -184,7 +184,7 @@ describe('正则工具测试', () => {
     });
 
     it('应该正确处理特殊替换字符', () => {
-      const result = regexUtils.replace('\\$\\d+', '', '$100', '\$USD');
+      const result = regexUtils.replace('\\$\\d+', '', '$100', '$USD');
       expect(result.result).toBe('$USD');
     });
   });
@@ -298,7 +298,7 @@ describe('正则工具测试', () => {
     });
 
     it('应该处理零宽断言', () => {
-      const result = regexUtils.test('(?<=\$)\\d+', '', '$100');
+      const result = regexUtils.test('(?<=$)\\d+', '', '$100');
       
       if (result.matches.length > 0) expect(result.matches[0].text).toBe('100');
     });
