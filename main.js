@@ -1,6 +1,7 @@
 /**
  * Carrick Toolbox - 核心调度逻辑
  * 负责路由管理、工具加载和事件协调
+ * 支持路径路由: /tool/:id 和 hash路由: #toolId
  */
 
 import { domHelper } from './utils/domHelper.js';
@@ -13,6 +14,7 @@ class ToolboxApp {
     this.sidebar = null;
     this.isInitialized = false;
     this.usageStats = this.loadUsageStats();
+    this.usePathRouting = true; // 启用路径路由
   }
 
   /**
@@ -72,6 +74,28 @@ class ToolboxApp {
   }
 
   /**
+   * 解析当前URL获取工具ID
+   * 支持: /tool/:id, /tools/:id, #:id
+   */
+  parseRouteToolId() {
+    const path = window.location.pathname;
+    const hash = window.location.hash.slice(1);
+
+    // 优先检查路径路由 /tool/:id 或 /tools/:id
+    const pathMatch = path.match(/^\/tool(?:s)?\/([^\/]+)$/);
+    if (pathMatch) {
+      return pathMatch[1];
+    }
+
+    // 回退到hash路由
+    if (hash) {
+      return hash;
+    }
+
+    return null;
+  }
+
+  /**
    * 初始化应用
    */
   async init() {
@@ -91,9 +115,15 @@ class ToolboxApp {
     // 绑定导航事件
     this.bindNavigation();
 
-    // 加载默认工具
-    const defaultTool = 'analog-clock';
-    await this.loadTool(defaultTool);
+    // 绑定路由事件
+    this.bindRouting();
+
+    // 解析URL加载对应工具
+    const routeToolId = this.parseRouteToolId();
+    const initialTool = routeToolId && this.tools.has(routeToolId)
+      ? routeToolId
+      : 'analog-clock';
+    await this.loadTool(initialTool);
 
     // 绑定主题切换
     this.bindThemeToggle();
@@ -194,10 +224,6 @@ class ToolboxApp {
         const toolId = item.dataset.tool;
         if (toolId) {
           await this.loadTool(toolId);
-          
-          // 更新激活状态
-          domHelper.findAll('.tool-item').forEach(i => domHelper.removeClass(i, 'active'));
-          domHelper.addClass(item, 'active');
         }
       });
     });
@@ -222,6 +248,27 @@ class ToolboxApp {
   }
 
   /**
+   * 绑定路由事件
+   */
+  bindRouting() {
+    // 处理浏览器后退/前进 - popstate事件
+    window.addEventListener('popstate', () => {
+      const toolId = this.parseRouteToolId();
+      if (toolId && toolId !== this.currentTool && this.tools.has(toolId)) {
+        this.loadTool(toolId, false); // 不更新URL，因为是URL变化触发的
+      }
+    });
+
+    // 保留hashchange支持向后兼容
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.slice(1);
+      if (hash && hash !== this.currentTool && this.tools.has(hash)) {
+        this.loadTool(hash, false);
+      }
+    });
+  }
+
+  /**
    * 更新导航状态
    */
   updateActiveNavigation(toolId) {
@@ -236,14 +283,28 @@ class ToolboxApp {
       domHelper.addClass(currentItem, 'active');
     }
 
-    // 更新URL hash
-    window.location.hash = toolId;
+    // 更新URL路径
+    if (this.usePathRouting) {
+      const newPath = `/tool/${toolId}`;
+      if (window.location.pathname !== newPath) {
+        window.history.pushState({ toolId }, '', newPath);
+      }
+    } else {
+      // 回退到hash路由
+      window.location.hash = toolId;
+    }
+
+    // 更新页面标题
+    const toolConfig = this.tools.get(toolId);
+    if (toolConfig) {
+      document.title = `${toolConfig.name} - Carrick Toolbox`;
+    }
   }
 
   /**
    * 加载工具
    */
-  async loadTool(toolId) {
+  async loadTool(toolId, updateUrl = true) {
     const toolConfig = this.tools.get(toolId);
     if (!toolConfig) {
       console.error(`Tool ${toolId} not found`);
@@ -285,7 +346,9 @@ class ToolboxApp {
       this.recordToolUsage(toolId);
 
       // 更新导航状态
-      this.updateActiveNavigation(toolId);
+      if (updateUrl) {
+        this.updateActiveNavigation(toolId);
+      }
 
       // 隐藏加载状态
       this.hideLoading();
@@ -591,14 +654,6 @@ domHelper.on(document, 'DOMContentLoaded', () => {
   app.init().catch(error => {
     console.error('Failed to initialize app:', error);
   });
-});
-
-// 处理浏览器后退/前进
-window.addEventListener('hashchange', () => {
-  const hash = window.location.hash.slice(1);
-  if (hash && hash !== app.getCurrentTool()) {
-    app.loadTool(hash);
-  }
 });
 
 // 导出应用实例

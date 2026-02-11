@@ -1,6 +1,6 @@
 /**
  * 简单的HTTP服务器
- * 用于解决ES6模块的CORS问题
+ * 用于解决ES6模块的CORS问题，并支持SPA路由
  */
 
 import http from 'http';
@@ -32,6 +32,21 @@ const mimeTypes = {
   '.wasm': 'application/wasm'
 };
 
+// SPA路由处理 - 工具路径映射
+function parseToolRoute(pathname) {
+  // 匹配 /tool/:id 格式
+  const toolMatch = pathname.match(/^\/tool\/([^\/]+)$/);
+  if (toolMatch) {
+    return { toolId: toolMatch[1], isToolRoute: true };
+  }
+  // 匹配 /tools/:id 格式（兼容旧格式）
+  const toolsMatch = pathname.match(/^\/tools\/([^\/]+)$/);
+  if (toolsMatch) {
+    return { toolId: toolsMatch[1], isToolRoute: true };
+  }
+  return { isToolRoute: false };
+}
+
 const server = http.createServer((req, res) => {
   // 启用CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -44,10 +59,19 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  let pathname = req.url;
+  let pathname = req.url.split('?')[0]; // 移除查询参数
+
+  // 检查是否是工具路由
+  const { toolId, isToolRoute } = parseToolRoute(pathname);
 
   // 默认加载index.html
   if (pathname === '/') {
+    pathname = '/index.html';
+  }
+
+  // 如果是工具路由，也返回index.html (SPA fallback)
+  if (isToolRoute) {
+    console.log(`[SPA] Routing to tool: ${toolId}`);
     pathname = '/index.html';
   }
 
@@ -58,9 +82,23 @@ const server = http.createServer((req, res) => {
   fs.readFile(filePath, (err, data) => {
     if (err) {
       if (err.code === 'ENOENT') {
-        // 文件不存在，返回404
-        res.writeHead(404, { 'Content-Type': 'text/html' });
-        res.end('<h1>404 Not Found</h1>');
+        // 文件不存在，检查是否是SPA路由（非API请求）
+        if (!pathname.startsWith('/api/') && !pathname.includes('.')) {
+          // 返回index.html让前端路由处理
+          fs.readFile(path.join(__dirname, 'index.html'), (err, indexData) => {
+            if (err) {
+              res.writeHead(500, { 'Content-Type': 'text/html' });
+              res.end('<h1>500 Internal Server Error</h1>');
+            } else {
+              res.writeHead(200, { 'Content-Type': 'text/html' });
+              res.end(indexData);
+            }
+          });
+        } else {
+          // 文件不存在，返回404
+          res.writeHead(404, { 'Content-Type': 'text/html' });
+          res.end('<h1>404 Not Found</h1>');
+        }
       } else {
         // 服务器错误
         res.writeHead(500, { 'Content-Type': 'text/html' });
@@ -77,6 +115,7 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
   console.log(`🚀 Carrick Toolbox 开发服务器已启动`);
   console.log(`📱 访问地址: http://localhost:${PORT}`);
+  console.log(`🛠️  工具路由: http://localhost:${PORT}/tool/:id`);
   console.log(`🔄 按 Ctrl+C 停止服务器`);
 });
 
