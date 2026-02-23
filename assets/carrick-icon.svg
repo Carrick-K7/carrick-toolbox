@@ -1,15 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <!-- Toolbox - 填充版 -->
   <circle cx="50" cy="50" r="45" fill="#39C5BB"/>
-  <!-- 工具箱白色线框 -->
-  <rect x="20" y="35" width="60" height="42" rx="6" fill="none" stroke="white" stroke-width="4"/>
-  <!-- 提手 -->
-  <path d="M35 35 L35 28 Q35 20 42 20 L58 20 Q65 20 65 28 L65 35" fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/>
-  <!-- 锁扣 -->
-  <rect x="42" y="45" width="16" height="12" rx="3" fill="none" stroke="white" stroke-width="3"/>
-  <!-- 扳手 -->
-  <circle cx="32" cy="65" r="5" fill="none" stroke="white" stroke-width="2"/>
-  <line x1="32" y1="70" x2="32" y2="75" stroke="white" stroke-width="2"/>
-  <!-- 螺丝刀 -->
-  <rect x="68" y="60" width="4" height="15" fill="white" rx="1"/>
+  <text x="50" y="68" font-size="55" text-anchor="middle" fill="white" font-family="Consolas, monospace" font-weight="bold">T</text>
 </svg>
