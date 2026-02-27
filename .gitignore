@@ -22,3 +22,8 @@ Thumbs.db
 *.tmp
 *.bak
 *~
+
+# Environment variables
+.env
+.env.*
+!.env.example
