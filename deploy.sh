@@ -47,3 +47,10 @@ echo "✅ 部署完成！"
 echo ""
 echo "💡 提示: Caddy配置由 carrick-infra 项目独立管理"
 echo "   如需更新路由，请修改 carrick-infra/caddy/projects/toolbox.caddy"
+
+# 自动触发基础设施重载（除非跳过）
+if [ -z "$SKIP_INFRA_RELOAD" ]; then
+    echo "🔄 触发基础设施重载..."
+    cd /root/.openclaw/workspace/projects/carrick-infra
+    bash deploy.sh
+fi
