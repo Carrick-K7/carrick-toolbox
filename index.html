@@ -78,10 +78,30 @@
 
       <!-- 主题切换 -->
       <div class="sidebar-footer">
-        <button class="theme-toggle">
-          <i class="fas fa-moon"></i>
-          <span>切换主题</span>
-        </button>
+        <div class="theme-switcher">
+          <button class="theme-current">
+            <i class="fas fa-moon"></i>
+            <span class="theme-label">切换主题</span>
+          </button>
+          <div class="theme-options">
+            <button class="theme-option" data-theme="light">
+              <i class="fas fa-sun"></i>
+              <span>亮色</span>
+            </button>
+            <button class="theme-option" data-theme="dark">
+              <i class="fas fa-moon"></i>
+              <span>暗色</span>
+            </button>
+            <button class="theme-option" data-theme="cyberpunk">
+              <i class="fas fa-sparkles"></i>
+              <span>赛博朋克</span>
+            </button>
+            <button class="theme-option" data-theme="system">
+              <i class="fas fa-desktop"></i>
+              <span>跟随系统</span>
+            </button>
+          </div>
+        </div>
       </div>
     </nav>
 

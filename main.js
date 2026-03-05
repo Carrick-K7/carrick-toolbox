@@ -2,9 +2,11 @@
  * Carrick Toolbox - 核心调度逻辑
  * 负责路由管理、工具加载和事件协调
  * 支持路径路由: /tool/:id 和 hash路由: #toolId
+ * 主题系统: 基于 Carrick UI useTheme
  */
 
 import { domHelper } from './utils/domHelper.js';
+import { initTheme, onThemeChange, setTheme, getThemeState } from './composables/useTheme.js';
 
 class ToolboxApp {
   constructor() {
@@ -443,27 +445,58 @@ class ToolboxApp {
   }
 
   /**
-   * 绑定主题切换
+   * 绑定主题切换 - 使用 Carrick UI 主题系统
    */
   bindThemeToggle() {
-    const themeToggle = domHelper.find('.theme-toggle');
-    if (themeToggle) {
-      domHelper.on(themeToggle, 'click', () => {
-        const isDark = domHelper.hasClass(document.body, 'dark');
-        if (isDark) {
-          domHelper.removeClass(document.body, 'dark');
-          localStorage.setItem('theme', 'light');
-        } else {
-          domHelper.addClass(document.body, 'dark');
-          localStorage.setItem('theme', 'dark');
-        }
-      });
+    const themeSwitcher = domHelper.find('.theme-switcher');
+    if (!themeSwitcher) return;
 
-      // 恢复主题设置
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'dark') {
-        domHelper.addClass(document.body, 'dark');
+    const themeCurrent = themeSwitcher.querySelector('.theme-current');
+    const themeOptions = themeSwitcher.querySelector('.theme-options');
+
+    // 初始化主题
+    initTheme();
+
+    // 订阅主题变化，更新 UI
+    onThemeChange((state) => {
+      // 更新当前主题显示
+      if (themeCurrent) {
+        const icon = themeCurrent.querySelector('i');
+        const label = themeCurrent.querySelector('.theme-label');
+        if (icon) {
+          // 移除旧图标类
+          icon.className = icon.className.replace(/fa-\w+/, `fa-${state.config.icon.toLowerCase()}`);
+        }
+        if (label) {
+          label.textContent = state.config.label;
+        }
       }
+
+      // 更新选项激活状态
+      if (themeOptions) {
+        themeOptions.querySelectorAll('.theme-option').forEach(option => {
+          option.classList.toggle('active', option.dataset.theme === state.currentTheme);
+        });
+      }
+    });
+
+    // 点击展开/收起选项
+    if (themeCurrent) {
+      domHelper.on(themeCurrent, 'click', () => {
+        domHelper.toggleClass(themeOptions, 'expanded');
+      });
+    }
+
+    // 绑定主题选项点击
+    if (themeOptions) {
+      themeOptions.querySelectorAll('.theme-option').forEach(option => {
+        domHelper.on(option, 'click', () => {
+          const theme = option.dataset.theme;
+          if (theme) {
+            setTheme(theme);
+          }
+        });
+      });
     }
   }
 

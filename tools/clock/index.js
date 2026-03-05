@@ -29,6 +29,9 @@ export default class AnalogClock {
       showMarkers: true,
       showNumbers: true
     };
+    this.isFullscreen = false;
+    this.wakeLock = null;
+    this.isImmersive = false;
   }
 
   /**
@@ -46,8 +49,16 @@ export default class AnalogClock {
    */
   render() {
     this.container.innerHTML = `
+      <div class="clock-actions">
+        <button class="clock-action-btn fullscreen-btn" id="fullscreen-btn" title="全屏模式">
+          <i class="fas fa-expand"></i>
+        </button>
+        <button class="clock-action-btn immersive-btn" id="immersive-btn" title="沉浸模式（防止熄屏）">
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
       <div class="clock-wrapper" id="clock-wrapper">
-        <div class="clock">
+        <div class="clock" id="clock">
           <div class="clock-inner">
             <div class="clock-face" id="clock-face"></div>
             <div class="hand hour-hand" id="hour-hand"></div>
@@ -421,6 +432,33 @@ export default class AnalogClock {
    * 绑定事件
    */
   bindEvents() {
+    // 全屏按钮
+    const fullscreenBtn = domHelper.find('#fullscreen-btn');
+    if (fullscreenBtn) {
+      domHelper.on(fullscreenBtn, 'click', () => this.toggleFullscreen());
+    }
+
+    // 点击时钟切换全屏
+    const clock = domHelper.find('#clock');
+    if (clock) {
+      domHelper.on(clock, 'dblclick', () => this.toggleFullscreen());
+    }
+
+    // 沉浸模式按钮
+    const immersiveBtn = domHelper.find('#immersive-btn');
+    if (immersiveBtn) {
+      domHelper.on(immersiveBtn, 'click', () => this.toggleImmersive());
+    }
+
+    // 监听全屏变化事件
+    domHelper.on(document, 'fullscreenchange', () => this.handleFullscreenChange());
+    domHelper.on(document, 'webkitfullscreenchange', () => this.handleFullscreenChange());
+    domHelper.on(document, 'mozfullscreenchange', () => this.handleFullscreenChange());
+    domHelper.on(document, 'MSFullscreenChange', () => this.handleFullscreenChange());
+
+    // 页面可见性变化时处理沉浸模式
+    domHelper.on(document, 'visibilitychange', () => this.handleVisibilityChange());
+
     // 配置面板展开/收起
     const configHeader = domHelper.find('#config-header');
     const configPanel = domHelper.find('#config-panel');
@@ -824,6 +862,185 @@ export default class AnalogClock {
   }
 
   /**
+   * 切换全屏模式
+   */
+  async toggleFullscreen() {
+    const clockWrapper = domHelper.find('#clock-wrapper');
+    if (!clockWrapper) return;
+
+    try {
+      if (!this.isFullscreen) {
+        // 进入全屏
+        if (clockWrapper.requestFullscreen) {
+          await clockWrapper.requestFullscreen();
+        } else if (clockWrapper.webkitRequestFullscreen) {
+          await clockWrapper.webkitRequestFullscreen();
+        } else if (clockWrapper.mozRequestFullScreen) {
+          await clockWrapper.mozRequestFullScreen();
+        } else if (clockWrapper.msRequestFullscreen) {
+          await clockWrapper.msRequestFullscreen();
+        }
+      } else {
+        // 退出全屏
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          await document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          await document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          await document.msExitFullscreen();
+        }
+      }
+    } catch (error) {
+      console.error('Fullscreen error:', error);
+      // 如果全屏API失败，使用类名方式
+      this.toggleFullscreenClass();
+    }
+  }
+
+  /**
+   * 使用CSS类切换全屏效果（降级方案）
+   */
+  toggleFullscreenClass() {
+    const clockWrapper = domHelper.find('#clock-wrapper');
+    const fullscreenBtn = domHelper.find('#fullscreen-btn');
+    if (!clockWrapper) return;
+
+    this.isFullscreen = !this.isFullscreen;
+    clockWrapper.classList.toggle('fullscreen-fallback', this.isFullscreen);
+
+    if (fullscreenBtn) {
+      const icon = fullscreenBtn.querySelector('i');
+      if (icon) {
+        icon.className = this.isFullscreen ? 'fas fa-compress' : 'fas fa-expand';
+      }
+      fullscreenBtn.title = this.isFullscreen ? '退出全屏' : '全屏模式';
+      fullscreenBtn.classList.toggle('active', this.isFullscreen);
+    }
+
+    // 全屏时增大时钟
+    if (this.isFullscreen) {
+      this.previousClockSize = this.config.clockSize;
+      this.setConfig('clockSize', Math.min(600, window.innerWidth - 80));
+    } else {
+      this.setConfig('clockSize', this.previousClockSize || 280);
+    }
+  }
+
+  /**
+   * 处理全屏状态变化
+   */
+  handleFullscreenChange() {
+    const isFullscreen = !!(document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement ||
+      document.msFullscreenElement);
+
+    this.isFullscreen = isFullscreen;
+
+    const fullscreenBtn = domHelper.find('#fullscreen-btn');
+    if (fullscreenBtn) {
+      const icon = fullscreenBtn.querySelector('i');
+      if (icon) {
+        icon.className = isFullscreen ? 'fas fa-compress' : 'fas fa-expand';
+      }
+      fullscreenBtn.title = isFullscreen ? '退出全屏' : '全屏模式';
+      fullscreenBtn.classList.toggle('active', isFullscreen);
+    }
+
+    // 全屏时增大时钟，退出时恢复
+    if (isFullscreen) {
+      this.previousClockSize = this.config.clockSize;
+      this.setConfig('clockSize', Math.min(600, window.innerWidth - 80));
+    } else {
+      this.setConfig('clockSize', this.previousClockSize || 280);
+    }
+  }
+
+  /**
+   * 切换沉浸模式（屏幕常亮）
+   */
+  async toggleImmersive() {
+    try {
+      if (!this.isImmersive) {
+        // 请求屏幕唤醒锁
+        if ('wakeLock' in navigator) {
+          this.wakeLock = await navigator.wakeLock.request('screen');
+          this.isImmersive = true;
+
+          // 监听锁释放
+          this.wakeLock.addEventListener('release', () => {
+            console.log('Wake Lock released');
+            this.isImmersive = false;
+            this.updateImmersiveUI();
+          });
+        } else {
+          // 降级方案：使用屏幕保持活动状态的其他方法
+          console.warn('Wake Lock API not supported');
+          this.isImmersive = true;
+        }
+      } else {
+        // 释放屏幕唤醒锁
+        if (this.wakeLock) {
+          await this.wakeLock.release();
+          this.wakeLock = null;
+        }
+        this.isImmersive = false;
+      }
+
+      this.updateImmersiveUI();
+    } catch (error) {
+      console.error('Immersive mode error:', error);
+      // 即使API失败也切换UI状态（可能有其他方式保持屏幕常亮）
+      this.isImmersive = !this.isImmersive;
+      this.updateImmersiveUI();
+    }
+  }
+
+  /**
+   * 更新沉浸模式UI
+   */
+  updateImmersiveUI() {
+    const immersiveBtn = domHelper.find('#immersive-btn');
+    const clockWrapper = domHelper.find('#clock-wrapper');
+
+    if (immersiveBtn) {
+      const icon = immersiveBtn.querySelector('i');
+      if (icon) {
+        icon.className = this.isImmersive ? 'fas fa-eye-slash' : 'fas fa-eye';
+      }
+      immersiveBtn.title = this.isImmersive ? '退出沉浸模式' : '沉浸模式（防止熄屏）';
+      immersiveBtn.classList.toggle('active', this.isImmersive);
+    }
+
+    if (clockWrapper) {
+      clockWrapper.classList.toggle('immersive-mode', this.isImmersive);
+    }
+  }
+
+  /**
+   * 处理页面可见性变化
+   */
+  async handleVisibilityChange() {
+    if (this.isImmersive && document.visibilityState === 'visible') {
+      // 页面重新可见时，如果处于沉浸模式，重新请求唤醒锁
+      try {
+        if ('wakeLock' in navigator && !this.wakeLock) {
+          this.wakeLock = await navigator.wakeLock.request('screen');
+          this.wakeLock.addEventListener('release', () => {
+            console.log('Wake Lock released');
+            this.isImmersive = false;
+            this.updateImmersiveUI();
+          });
+        }
+      } catch (error) {
+        console.error('Wake Lock re-acquisition failed:', error);
+      }
+    }
+  }
+
+  /**
    * 更新时钟大小
    */
   updateClockSize() {
@@ -879,9 +1096,34 @@ export default class AnalogClock {
   /**
    * 销毁时钟
    */
-  destroy() {
+  async destroy() {
     if (this.clockInterval) {
       clearInterval(this.clockInterval);
+    }
+    // 释放屏幕唤醒锁
+    if (this.wakeLock) {
+      try {
+        await this.wakeLock.release();
+      } catch (e) {
+        console.error('Error releasing wake lock:', e);
+      }
+      this.wakeLock = null;
+    }
+    // 退出全屏
+    if (this.isFullscreen) {
+      try {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          await document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          await document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          await document.msExitFullscreen();
+        }
+      } catch (e) {
+        console.error('Error exiting fullscreen:', e);
+      }
     }
     domHelper.empty(this.container);
   }

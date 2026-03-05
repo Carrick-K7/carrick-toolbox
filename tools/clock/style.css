@@ -2,6 +2,51 @@
    模拟时钟工具样式
    =================================== */
 
+/* ===================================
+   模拟时钟工具样式
+   =================================== */
+
+/* 时钟操作按钮 */
+.clock-actions {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 12px;
+  z-index: 101;
+}
+
+.clock-action-btn {
+  width: 44px;
+  height: 44px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.clock-action-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--shadow);
+}
+
+.clock-action-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent)40, 0 8px 20px var(--shadow);
+}
+
 .clock-wrapper {
   display: flex;
   flex-direction: column;
@@ -10,13 +55,65 @@
   padding: 20px;
 }
 
+/* 全屏模式 */
+.clock-wrapper:fullscreen,
+.clock-wrapper:-webkit-full-screen,
+.clock-wrapper:-moz-full-screen,
+.clock-wrapper:-ms-fullscreen {
+  background: var(--bg-primary);
+  justify-content: center;
+  padding: 40px;
+}
+
+/* 全屏降级方案 */
+.clock-wrapper.fullscreen-fallback {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background: var(--bg-primary);
+  justify-content: center;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+/* 沉浸模式 */
+.clock-wrapper.immersive-mode {
+  position: relative;
+}
+
+.clock-wrapper.immersive-mode::before {
+  content: '沉浸模式已开启 - 屏幕不会自动熄屏';
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  z-index: 102;
+  animation: fadeInOut 3s ease;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+}
+
 .clock {
   width: var(--clock-size, 280px);
   height: var(--clock-size, 280px);
   background: var(--clock-face);
   border-radius: 50%;
   position: relative;
-  box-shadow: 
+  box-shadow:
     0 8px 32px var(--shadow),
     inset 0 2px 8px rgba(0, 0, 0, 0.1);
   border: 3px solid var(--accent);
@@ -667,23 +764,40 @@
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+  .clock-actions {
+    top: 12px;
+    left: 12px;
+    gap: 8px;
+  }
+
+  .clock-action-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
   .clock-wrapper {
     padding: 16px;
     gap: 16px;
   }
-  
+
+  .clock-wrapper:fullscreen,
+  .clock-wrapper.fullscreen-fallback {
+    padding: 20px;
+  }
+
   .clock {
     --clock-size: 240px;
   }
-  
+
   .digital-time {
     font-size: 28px;
   }
-  
+
   .digital-time .seconds {
     font-size: 20px;
   }
-  
+
   .calendar-wrapper {
     min-width: 280px;
   }
